@@ -18,7 +18,7 @@ To compute features:
 ```python
 python extract_features.py --frame_dir 'path to frames directory' --csv_file 'path to meta-data csv file'  --num_patch 'number of patches (224*224) to be extracted from frames --overlapping 'overlapping between patches'
 ```
-Please note that the meta-data should be a csv file with two columns: video name and MOS also we use ResNet50 for features extractions.
+Please note that the meta-data should be a csv file with two columns: video name and MOS. Also we use ResNet50 for features extractions.
 
 
 To evaluate model:
