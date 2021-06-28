@@ -82,8 +82,10 @@ def prepare_datalist(path_to_csv, images_dir):
 	len_li = len(li)
 	len_train = int((len_li/100)*80)
 	len_test = len_li - len_train
-	for i in range(len(li)):
+	'''
+	for i in range(len(li)):        #only for konvid meta-data.
 		li[i][0]= str(int(li[i][0]))
+	'''
 
 
 
