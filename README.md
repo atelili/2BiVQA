@@ -61,9 +61,13 @@ Be sure to put this files into features folder.
 python evaluate_model.py  --input_final_model konvid_model1.h5 --sp_model_weights res-bi-sp_koniq.h5  --x_test ./features/x_test_konvid.npy --n 30
 ```
 SROCC: 0.8463
+
 PLCC: 0.8404
+
 KROCC:  0.6529
+
 RMSE: 0.3620
+
 
 <p align="center">
   <img width="640" height="480" src="https://github.com/Tlili-ahmed/BVQA/blob/master/figures/mos_sroc%20%3D0.8463255562480931.png">
