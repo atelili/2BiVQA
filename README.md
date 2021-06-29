@@ -26,6 +26,13 @@ To evaluate model:
 
 You can download konvid test features [here](https://drive.google.com/drive/folders/1hDXz0TIpmayBWb1afuclTg1Ca8PR_o4R?usp=sharing).
 
+Or:
+
+```python
+$wget https://drive.google.com/uc?export=download&id=1swn49NczfU49ahhwUu64fTViry2tZupu
+$wget https://drive.google.com/uc?export=download&id=1xm5U6tiwwcBKKElgirEpOFAlWUENhg26
+```
+
 ```python
 python evaluate_model.py  ----input_final_model 'path to final model' --sp_model_weights 'path sp model'  --x_test 'path to npy file' --n 'number of frames per video'
 ```
