@@ -41,6 +41,9 @@ Then we need to use this wieghts to train the final model.
 python train.py --x_train 'path to train npy file' --n 'number of frames per video' --spatial_weights 'path to spatial bi-lstm model'
 ```
 
+## Evaluation
+
+
 To evaluate model:
 
 
