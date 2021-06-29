@@ -34,7 +34,7 @@ $wget https://drive.google.com/uc?export=download&id=1xm5U6tiwwcBKKElgirEpOFAlWU
 ```
 
 ```python
-python evaluate_model.py  ----input_final_model 'path to final model' --sp_model_weights 'path sp model'  --x_test 'path to npy file' --n 'number of frames per video'
+python evaluate_model.py  --input_final_model 'path to final model' --sp_model_weights 'path sp model'  --x_test 'path to npy file' --n 'number of frames per video'
 ```
 
 <p align="center">
