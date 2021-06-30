@@ -28,7 +28,7 @@ ResNet50 is used for features extractions.
 
 
 
-## 3-Train (optional):
+## 3-Model Training (optional):
 
 This step can be skipped, and directly test the model in the next section with pre-trained models. 
 
@@ -50,31 +50,23 @@ python train.py --x_train 'path to train npy file' --n 'number of frames per vid
 
 To test model:
 
+#### 1-On KonViD-1K:
+
+```python
+python evaluate_model.py --dataset 1 ' 
+```
+#### 2-On LIVE_VQC: 
+
+```python
+python evaluate_model.py --dataset 2 ' 
+```
+
+#### 3-On custom dataset: 
 
 ```python
 python evaluate_model.py  --input_final_model 'final model' --sp_model_weights 'path sp model'  --x_test 'path to npy file' --n 'number of frames per video'
 ```
 
-
-
-
-For testing our model on KonViD-1k:
-You can download KonViD-1K test features [here](https://drive.google.com/drive/folders/1hDXz0TIpmayBWb1afuclTg1Ca8PR_o4R?usp=sharing).
-
-Or :
-
-```python
-import wget
-x_test_konvid.npy = wget.download('http://openvvc.insa-rennes.fr/models/KonViD-1k/y_test_konvid.npy')
-y_test_konvid.npy = wget.download('http://openvvc.insa-rennes.fr/models/KonViD-1k/y_test_konvid.npy')
-```
-
-Then:
-
-
-```python
-python evaluate_model.py  --input_final_model konvid_model1.h5 --sp_model_weights res-bi-sp_koniq.h5  --x_test ./features/x_test_konvid.npy --n 30
-```
 
 
 |    Methods   |SROCC            | PLCC            | KROCC        | RMSE |
