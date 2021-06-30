@@ -114,7 +114,7 @@ def patch_dimension(x_train):
 if __name__ == '__main__':
 
   parser = argparse.ArgumentParser()
-  parser.add_argument('--dataset',  type=int, help='dataset to test: 1: for konvid, 2: for live, 3: for custom')
+  parser.add_argument('--dataset',default='3',  type=int, help='dataset to test: 1: for konvid, 2: for live, 3: for custom')
 
 
   parser.add_argument('--input_final_model',  type=str, help='path to the model')
@@ -128,7 +128,7 @@ if __name__ == '__main__':
         help='path to test .npy file')
   parser.add_argument(
         '--n',
-        default='0',
+        default='30',
         type=int,
         help='number of frames per videos')
   args = parser.parse_args()
