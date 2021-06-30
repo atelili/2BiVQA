@@ -55,19 +55,6 @@ To test model:
 ```python
 python evaluate_model.py --dataset 1 ' 
 ```
-#### 2-On LIVE_VQC: 
-
-```python
-python evaluate_model.py --dataset 2 ' 
-```
-
-#### 3-On custom dataset: 
-
-```python
-python evaluate_model.py  --input_final_model 'final model' --sp_model_weights 'path sp model'  --x_test 'path to npy file' --n 'number of frames per video'
-```
-
-
 
 |    Methods   |SROCC            | PLCC            | KROCC        | RMSE |
 |:------------:|:---------------------:|:--------------------:|:-------------------:|:------------:|
@@ -77,6 +64,31 @@ python evaluate_model.py  --input_final_model 'final model' --sp_model_weights '
 <p align="center">
   <img width="640" height="480" src="https://github.com/Tlili-ahmed/BVQA/blob/master/figures/mos_sroc%20%3D0.8463255562480931.png">
 </p>
+
+#### 2-On LIVE_VQC: 
+
+```python
+python evaluate_model.py --dataset 2 ' 
+```
+
+|    Methods   |SROCC            | PLCC            | KROCC        | RMSE |
+|:------------:|:---------------------:|:--------------------:|:-------------------:|:------------:|
+| ResNet-50 + Bi-LSTM   | 0.7614  | 0.8325     | 0.6212 | 9,9799 |
+
+
+<p align="center">
+  <img width="640" height="480" src="https://github.com/Tlili-ahmed/BVQA/raw/master/figures/mos_sroc%20%3D0.7661.png">
+</p>
+
+
+#### 3-On custom dataset: 
+
+```python
+python evaluate_model.py  --input_final_model 'final model' --sp_model_weights 'path sp model'  --x_test 'path to npy file' --n 'number of frames per video'
+```
+
+
+
 
 
 ## 5-Performance Benchmark:
