@@ -58,6 +58,13 @@ python evaluate_model.py  --input_final_model 'final model' --sp_model_weights '
 For testing our model on KonViD-1k:
 You can download KonViD-1K test features [here](https://drive.google.com/drive/folders/1hDXz0TIpmayBWb1afuclTg1Ca8PR_o4R?usp=sharing).
 
+Or with wget:
+
+```cmd
+$wget http://openvvc.insa-rennes.fr/models/KonViD-1k/x_test_konvid.npy
+$wget http://openvvc.insa-rennes.fr/models/KonViD-1k/y_test_konvid.npy
+```
+
 Be sure to put this files into features folder.
 
 ```python
