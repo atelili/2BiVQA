@@ -35,12 +35,38 @@ from tensorflow.keras.layers import MaxPooling2D ,Dense,Concatenate ,Dropout ,In
 import argparse
 import random
 from tqdm import tqdm
+import urllib.request
+
+
 
 
 
 
 tf.keras.backend.clear_session()
 start_time = time.time()
+
+def download_features(dataset):
+	if dataset == 1:
+		URL1 = "http://openvvc.insa-rennes.fr/models/KonViD-1k/x_test_konvid.npy"
+		URL2 = "http://openvvc.insa-rennes.fr/models/KonViD-1k/y_test_konvid.npy"
+		filename1 = "./features/x_test_konvid.npy"
+		filename2 = "./features/y_test_konvid.npy"
+		urllib.request.urlretrieve (URL1 , filename1 )
+		urllib.request.urlretrieve (URL2 , filename2 )
+
+	if dataset == 2:
+		URL1 = "http://openvvc.insa-rennes.fr/models/LIVE-VQC/x_test_live.npy"
+		URL2 = "http://openvvc.insa-rennes.fr/models/LIVE-VQC/y_test_live.npy"
+		filename1 = "./features/x_test_live.npy"
+		filename2 = "./features/y_test_live.npy"
+		urllib.request.urlretrieve (URL1 , filename1 )
+		urllib.request.urlretrieve (URL2 , filename2 )
+
+
+
+
+
+
 
 
 
@@ -88,8 +114,12 @@ def patch_dimension(x_train):
 if __name__ == '__main__':
 
   parser = argparse.ArgumentParser()
+  parser.add_argument('--dataset',  type=int, help='dataset to test: 1: for konvid, 2: for live, 3: for custom')
+
+
   parser.add_argument('--input_final_model',  type=str, help='path to the model')
   parser.add_argument('--sp_model_weights',  type=str, help='path to the model')
+
 
   parser.add_argument(
         '--x_test',
@@ -103,25 +133,53 @@ if __name__ == '__main__':
         help='number of frames per videos')
   args = parser.parse_args()
 
-  n = args.n
-  features_name = args.x_test.split('x_test')
+  if not os.path.exists('./features'):
+    os.makedirs('./features')
+
+  dataset = arg.dataset
+
+  download_features(dataset)
+
+  if dataset ==1:
+  	x_test = np.load('./features/x_test_live.npy')
+  	y_test = np.load('./features/y_test_live.npy')
+  	sp_model_weights = './models/res-bi-sp_koniq.h5'
+  	final_model = './models/konvid_model1.h5'
+  	n = 30
+  elif dataset ==2:
+  	x_test = np.load('./features/x_test_live.npy')
+  	y_test = np.load('./features/y_test_live.npy')
+  	sp_model_weights = './models/res-bi-sp_koniq.h5'
+  	final_model = './models/live_model1.h5'
+  	n = 30
+  elif dataset==3:
+  	features_name = args.x_test.split('x_test')
+  	x_test = np.load('./features/x_test'+features_name[-1])
+  	y_test = np.load('./features/y_test'+features_name[-1])
+  	n = args.n
+  	sp_model = args.sp_model_weights
+  	f_model = args.input_final_model
+
+
+
+
+
   
-  x_test = np.load('./features/x_test'+features_name[-1])
-  y_test = np.load('./features/y_test'+features_name[-1])
 
   patches = patch_dimension(x_test)
 
 
   In = Input((n,patches,2048))
  
-  model = load_model('./models/' +args.sp_model_weights )
+  model = load_model('./models/' +sp_model )
   model.summary()
   for layer in model.layers:
     layer.trainable = True
   model_final = Model(inputs=model.input,outputs=model.layers[-3].output )
 
   model = build_model((n,patches,2048), model_final)
-  model.load_weights('./models/' + args.input_final_model)
+  model.load_weights('./models/' + f_model)
+
 
 
   nbr_test_video = int(x_test.shape[0]/n)
@@ -195,4 +253,3 @@ if __name__ == '__main__':
                columns =['MOS', 'Predicted values'])
   df.to_csv('konvid.csv', index=False) 
   '''
-
