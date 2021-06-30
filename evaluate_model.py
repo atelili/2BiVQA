@@ -144,13 +144,13 @@ if __name__ == '__main__':
   	x_test = np.load('./features/x_test_konvid.npy')
   	y_test = np.load('./features/y_test_konvid.npy')
   	sp_model = 'res-bi-sp_koniq.h5'
-  	f_model = 'konvid_model1.h5'
+  	f_model = 'konvid_2_bilstm_join.h5'
   	n = 30
   elif dataset ==2:
   	x_test = np.load('./features/x_test_live.npy')
   	y_test = np.load('./features/y_test_live.npy')
   	sp_model = 'res-bi-sp_koniq.h5'
-  	f_model = 'live_model1.h5'
+  	f_model = 'live2_bilstm_join.h5'
   	n = 30
   elif dataset==3:
   	features_name = args.x_test.split('x_test')
