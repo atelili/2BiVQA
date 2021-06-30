@@ -1,24 +1,26 @@
-# BVQA
-BVQA is a deep learning algorithm to predict video quality assessment.
+# 2BVQA
 
-## Installation
+2BVQA is a no-reference deep learning based algorithm to predict visual video quality scores.
+
+## 1-Installation
 ```python
 pip install -r requirements.txt
 ```
 
-## Features extractions
-To extract frames from videos:
+## 2-Features extractions
+
+Please note that the meta-data should be a csv file with two columns: video name and MOS.
+### a- To extract frames from videos:
+
 ```python
 python video2frames.py --video_dir "path_to_videos_directory"  --nbr_frame "number_of_frames_per_videos_to_be_extracted"
 ```
 
-
-To compute features:
+### b- Features extraction:
 
 ```python
 python extract_features.py --frame_dir 'path to frames directory' --csv_file 'path to meta-data csv file'  --num_patch 'number of patches (224*224) to be extracted from frames --overlapping 'overlapping between patches'
 ```
-Please note that the meta-data should be a csv file with two columns: video name and MOS. 
 
 ResNet50 is used for features extractions.
 
@@ -26,25 +28,27 @@ ResNet50 is used for features extractions.
 
 
 
-## Train
+## 3-Train (optional):
 
-To train model:
+This step can be skipped, and directly test the model in the next section.
 
-First we need to train a bi-lstm to do spatial pooling between patches, in our case we trained our model on KONIQ 10-k dataset. 
+To train your own model:
+
+You can train the first bi-lstm to do spatial pooling between patches, or uses our spatial bi-lstm which was trained on KONIQ 10-k dataset. 
 
 ```python
 python train_spatial_bilstm.py --x_train 'path to train npy file'
 ```
-Then we need to use this wieghts to train the final model.
+Then you need to train the second Bi-lstm to do temporal pooling between frames:
 
 ```python
 python train.py --x_train 'path to train npy file' --n 'number of frames per video' --spatial_weights 'path to spatial bi-lstm model'
 ```
 
-## Evaluation
+## 4-Test: 
 
 
-To evaluate model:
+To test model:
 
 
 ```python
@@ -53,30 +57,29 @@ python evaluate_model.py  --input_final_model 'final model' --sp_model_weights '
 
 
 
-## Demo
 
 For testing our model on KonViD-1k:
 You can download KonViD-1K test features [here](https://drive.google.com/drive/folders/1hDXz0TIpmayBWb1afuclTg1Ca8PR_o4R?usp=sharing).
 
-Or with wget:
+Or :
 
-```cmd
-$wget http://openvvc.insa-rennes.fr/models/KonViD-1k/x_test_konvid.npy
-$wget http://openvvc.insa-rennes.fr/models/KonViD-1k/y_test_konvid.npy
+```python
+import wget
+x_test_konvid.npy = wget.download('http://openvvc.insa-rennes.fr/models/KonViD-1k/y_test_konvid.npy')
+y_test_konvid.npy = wget.download('http://openvvc.insa-rennes.fr/models/KonViD-1k/y_test_konvid.npy')
 ```
 
-Be sure to put this files into features folder.
+Then:
+
 
 ```python
 python evaluate_model.py  --input_final_model konvid_model1.h5 --sp_model_weights res-bi-sp_koniq.h5  --x_test ./features/x_test_konvid.npy --n 30
 ```
-SROCC: 0.8463
 
-PLCC: 0.8404
 
-KROCC:  0.6529
-
-RMSE: 0.3620
+|    Methods   |SROCC            | PLCC            | KROCC        | RMSE |
+|:------------:|:---------------------:|:--------------------:|:-------------------:|:------------:|
+| ResNet50-Bi-LSTM     | 0.8463         | 0.8404          | 0.6529   | 0.3620  |  
 
 
 <p align="center">
@@ -84,7 +87,7 @@ RMSE: 0.3620
 </p>
 
 
-## Performance Benchmark
+## 5-Performance Benchmark:
 
 
 ###### KonViD-1K:
