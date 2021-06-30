@@ -7,10 +7,10 @@
 pip install -r requirements.txt
 ```
 
-## 2-Features extractions
+## 2-Features extraction
 
 Please note that the meta-data should be a csv file with two columns: video name and MOS.
-### a- To extract frames from videos:
+### a- Extract frames from videos:
 
 ```python
 python video2frames.py --video_dir "path_to_videos_directory"  --nbr_frame "number_of_frames_per_videos_to_be_extracted"
@@ -30,7 +30,7 @@ ResNet50 is used for features extractions.
 
 ## 3-Train (optional):
 
-This step can be skipped, and directly test the model in the next section.
+This step can be skipped, and directly test the model in the next section with pre-trained models. 
 
 To train your own model:
 
