@@ -77,7 +77,7 @@ python evaluate_model.py --dataset 2
 
 
 <p align="center">
-  <img width="640" height="480" src="https://github.com/Tlili-ahmed/BVQA/raw/master/figures/mos_sroc%20%3D0.7661.png">
+  <img width="640" height="480" src="https://github.com/Tlili-ahmed/BVQA/blob/master/figures/mos_sroc%3D0.7614.png">
 </p>
 
 
