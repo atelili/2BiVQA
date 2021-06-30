@@ -128,7 +128,7 @@ if __name__ == '__main__':
         help='path to test .npy file')
   parser.add_argument(
         '--n',
-        default='',
+        default='0',
         type=int,
         help='number of frames per videos')
   args = parser.parse_args()
@@ -136,7 +136,7 @@ if __name__ == '__main__':
   if not os.path.exists('./features'):
     os.makedirs('./features')
 
-  dataset = arg.dataset
+  dataset = args.dataset
 
   download_features(dataset)
 
