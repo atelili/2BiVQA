@@ -1,6 +1,6 @@
-# 2BVQA
+# 2BiVQA
 
-2BVQA is a no-reference deep learning based algorithm to predict visual video quality scores.
+2BiVQA is a no-reference deep learning based algorithm to predict visual video quality scores.
 
 ## 1-Installation
 ```python
@@ -58,7 +58,7 @@ python evaluate_model.py --dataset 1
 
 |    Methods   |SROCC            | PLCC            | KROCC        | RMSE |
 |:------------:|:---------------------:|:--------------------:|:-------------------:|:------------:|
-| ResNet50-Bi-LSTM     | 0.8463         | 0.8404          | 0.6529   | 0.3620  |  
+| 2BiVQA     | 0.8463         | 0.8404          | 0.6529   | 0.3620  |  
 
 
 <p align="center">
@@ -73,7 +73,7 @@ python evaluate_model.py --dataset 2
 
 |    Methods   |SROCC            | PLCC            | KROCC        | RMSE |
 |:------------:|:---------------------:|:--------------------:|:-------------------:|:------------:|
-| ResNet-50 + Bi-LSTM   | 0.7614  | 0.8325     | 0.6212 | 9,9799 |
+| 2BiVQA   | 0.7614  | 0.8325     | 0.6212 | 9,9799 |
 
 
 <p align="center">
@@ -109,7 +109,7 @@ python evaluate_model.py  --input_final_model 'final model' --sp_model_weights '
 | VIDEVAL+KonCept512         | 0.8149   | 0.8169      | - | - |
 | RAPIQUE       | 0.8031   | 0.8175  | - | 0.3623  |
 | NR-QM UGC    | 0.8134  | 0.8143 | 0.6201 | 0.3695 |
-| ResNet-50 + Bi-LSTM   | 0.8463  | 0.8404     | 0.6529 | 0.3620 |
+| 2BiVQA   | 0.8463  | 0.8404     | 0.6529 | 0.3620 |
 
 ###### LIVE VQC:
 
@@ -124,7 +124,7 @@ python evaluate_model.py  --input_final_model 'final model' --sp_model_weights '
 | KonCept512       | 0.6645    | 0.7278       | - | - |
 | VIDEVAL+KonCept512         | 0.7849      | 0.8010       | - | - |
 | RAPIQUE       | 0.7548   | 0.7863  | - | 10.518  |
-| ResNet-50 + Bi-LSTM   | 0.7614  | 0.8325     | 0.6212 | 9,9799 |
+| 2BiVQA   | 0.7614  | 0.8325     | 0.6212 | 9,9799 |
 
 
 
@@ -137,7 +137,7 @@ python evaluate_model.py  --input_final_model 'final model' --sp_model_weights '
 | VSFA      | 0.8925   | 0.9587      | 0.7280 | 0.3463 |
 | RAPIQUE       | 0.8647   | 0.9247  | 0.6898 | 0.4742  |
 | NR-QM UGC    | 0.9352 | 0.9826 | 0.7937 | 0.2260 |
-| ResNet-50 + Bi-LSTM   | 0.9886  | 0.9987     | 0.9276 | 0.0630 |
+| 2BiVQA  | 0.9886  | 0.9987     | 0.9276 | 0.0630 |
 
 
 
