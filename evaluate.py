@@ -12,6 +12,7 @@ from scipy.stats import spearmanr,pearsonr
 import sklearn
 from scipy.stats import gaussian_kde
 import argparse
+import time
 from tqdm import tqdm
 import matplotlib.font_manager as fm
 
@@ -20,7 +21,6 @@ import matplotlib.font_manager as fm
 
 
 
-tf.keras.backend.clear_session()
 start_time = time.time()
 
 
@@ -55,10 +55,9 @@ if __name__ == '__main__':
   if not os.path.exists('./features'):
     os.makedirs('./features')
 
-  mos_file = args.mos
   predicted_file = args.mos_pred
 
-  y_ss, y_p = read_files('/content/konvid.csv')
+  y_ss, y_p = read_files(predicted_file)
  
 
 
