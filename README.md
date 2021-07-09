@@ -53,7 +53,7 @@ To test model:
 #### 1-On KonViD-1K:
 
 ```python
-python evaluate_model.py --dataset 1 
+python test_model.py --dataset 1 
 ```
 
 |    Methods   |SROCC            | PLCC            | KROCC        | RMSE |
@@ -68,7 +68,7 @@ python evaluate_model.py --dataset 1
 #### 2-On LIVE_VQC: 
 
 ```python
-python evaluate_model.py --dataset 2  
+python test_model.py --dataset 2  
 ```
 
 |    Methods   |SROCC            | PLCC            | KROCC        | RMSE |
@@ -84,7 +84,7 @@ python evaluate_model.py --dataset 2
 #### 3-On custom dataset: 
 
 ```python
-python evaluate_model.py  --input_final_model 'final model' --sp_model_weights 'path sp model'  --x_test 'path to npy file' --n 'number of frames per video'
+python test_model.py  --input_final_model 'final model' --sp_model_weights 'path sp model'  --x_test 'path to npy file' --n 'number of frames per video'
 ```
 
 
