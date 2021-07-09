@@ -50,7 +50,7 @@ python train.py --x_train 'path to train npy file' --n 'number of frames per vid
 
 To test model:
 
-#### 1-On KonViD-1K:
+#### a-On KonViD-1K:
 
 ```python
 python test_model.py --dataset 1 
@@ -65,7 +65,7 @@ python test_model.py --dataset 1
   <img src="https://github.com/Tlili-ahmed/BVQA/raw/master/figures/mos_KonViD-1K.png">
 </p>
 
-#### 2-On LIVE_VQC: 
+#### b-On LIVE_VQC: 
 
 ```python
 python test_model.py --dataset 2  
@@ -81,17 +81,33 @@ python test_model.py --dataset 2
 </p>
 
 
-#### 3-On custom dataset: 
+#### c-On custom dataset: 
 
 ```python
 python test_model.py  --input_final_model 'final model' --sp_model_weights 'path sp model'  --x_test 'path to npy file' --n 'number of frames per video'
 ```
 
+## 5-Demo:
+
+To predict quality for your own dataset using pre-trained model:
+
+```python
+python demo.py  --video_dir 'path to your dataset folder'
+```
+
+## 6-Evaluate:
+
+To evaluate model:
+
+Please note that your csv file should have two columns: 'Mos' and 'Predicted.
+
+```python
+python evaluate.py  --mos_pred 'path to csv file'
+```
 
 
 
-
-## 5-Performance Benchmark:
+## 7-Performance Benchmark:
 
 
 ###### KonViD-1K:
