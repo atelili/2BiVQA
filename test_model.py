@@ -114,7 +114,7 @@ def patch_dimension(x_train):
 if __name__ == '__main__':
 
   parser = argparse.ArgumentParser()
-  parser.add_argument('--dataset',default='3',  type=int, help='dataset to test: 1: for konvid, 2: for live, 3: for custom')
+  parser.add_argument('--dataset',default='custom',  type=str, help='dataset to test: konvid,  live, or custom')
 
 
   parser.add_argument('--input_final_model',  type=str, help='path to the model')
@@ -140,19 +140,19 @@ if __name__ == '__main__':
 
   download_features(dataset)
 
-  if dataset ==1:
+  if dataset =='konvid':
   	x_test = np.load('./features/x_test_konvid.npy')
   	y_test = np.load('./features/y_test_konvid.npy')
   	sp_model = 'res-bi-sp_koniq.h5'
   	f_model = 'konvid_2_bilstm_join.h5'
   	n = 30
-  elif dataset ==2:
+  elif dataset =='live':
   	x_test = np.load('./features/x_test_live.npy')
   	y_test = np.load('./features/y_test_live.npy')
   	sp_model = 'res-bi-sp_koniq.h5'
   	f_model = 'live2_bilstm_join.h5'
   	n = 30
-  elif dataset==3:
+  elif dataset=='custom':
   	features_name = args.x_test.split('x_test')
   	x_test = np.load('./features/x_test'+features_name[-1])
   	y_test = np.load('./features/y_test'+features_name[-1])
