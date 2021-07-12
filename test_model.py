@@ -46,7 +46,7 @@ tf.keras.backend.clear_session()
 start_time = time.time()
 
 def download_features(dataset):
-	if dataset == 1:
+	if dataset == 'konvid':
 		URL1 = "http://openvvc.insa-rennes.fr/models/KonViD-1k/x_test_konvid.npy"
 		URL2 = "http://openvvc.insa-rennes.fr/models/KonViD-1k/y_test_konvid.npy"
 		filename1 = "./features/x_test_konvid.npy"
@@ -54,7 +54,7 @@ def download_features(dataset):
 		urllib.request.urlretrieve (URL1 , filename1 )
 		urllib.request.urlretrieve (URL2 , filename2 )
 
-	if dataset == 2:
+	if dataset == 'live':
 		URL1 = "http://openvvc.insa-rennes.fr/models/LIVE-VQC/x_test_live.npy"
 		URL2 = "http://openvvc.insa-rennes.fr/models/LIVE-VQC/y_test_live.npy"
 		filename1 = "./features/x_test_live.npy"
@@ -140,19 +140,19 @@ if __name__ == '__main__':
 
   download_features(dataset)
 
-  if dataset =='konvid':
+  if dataset == 'konvid':
   	x_test = np.load('./features/x_test_konvid.npy')
   	y_test = np.load('./features/y_test_konvid.npy')
   	sp_model = 'res-bi-sp_koniq.h5'
   	f_model = 'konvid_2_bilstm_join.h5'
   	n = 30
-  elif dataset =='live':
+  elif dataset == 'live':
   	x_test = np.load('./features/x_test_live.npy')
   	y_test = np.load('./features/y_test_live.npy')
   	sp_model = 'res-bi-sp_koniq.h5'
   	f_model = 'live2_bilstm_join.h5'
   	n = 30
-  elif dataset=='custom':
+  elif dataset == 'custom':
   	features_name = args.x_test.split('x_test')
   	x_test = np.load('./features/x_test'+features_name[-1])
   	y_test = np.load('./features/y_test'+features_name[-1])
