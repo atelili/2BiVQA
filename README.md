@@ -53,7 +53,7 @@ To test model:
 #### a-On KonViD-1K:
 
 ```python
-python test_model.py --dataset 1 
+python test_model.py --dataset konvid 
 ```
 
 |    Methods   |SROCC            | PLCC            | KROCC        | RMSE |
@@ -68,7 +68,7 @@ python test_model.py --dataset 1
 #### b-On LIVE_VQC: 
 
 ```python
-python test_model.py --dataset 2  
+python test_model.py --dataset live  
 ```
 
 |    Methods   |SROCC            | PLCC            | KROCC        | RMSE |
