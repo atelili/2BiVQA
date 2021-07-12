@@ -102,7 +102,7 @@ To evaluate model:
 Please note that your csv file should have two columns: 'Mos' and 'Predicted.
 
 ```python
-python evaluate.py  --mos_pred 'path to csv file'
+python evaluate.py  --mos_pred konvid.csv
 ```
 
 
