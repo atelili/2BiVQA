@@ -7,7 +7,7 @@
 </p>
 
 
-## 1-Installation
+## 1-Requirements
 ```python
 pip install -r requirements.txt
 ```
