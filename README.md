@@ -1,6 +1,6 @@
 # 2BiVQA
 
-2BiVQA is a no-reference deep learning based algorithm to predict visual video quality scores.
+2BiVQA is a no-reference deep learning based video quality assessment metric.
 
 <p align="center">
   <img src="https://github.com/Tlili-ahmed/2BiVQA/blob/master/figures/fig.png">
