@@ -15,16 +15,13 @@ pip install -r requirements.txt
 ## 2-Features extraction
 
 Please note that the meta-data should be a csv file with two columns: video name and MOS.
-### a- Extract frames from videos:
 
-```python
-python video2frames.py --video_dir "path_to_videos_directory"  --nbr_frame "number_of_frames_per_videos_to_be_extracted"
+
 ```
-
-### b- Features extraction:
-
-```python
-python extract_features.py --frame_dir 'path to frames directory' --csv_file 'path to meta-data csv file'  --num_patch 'number of patches (224*224) to be extracted from frames --overlapping 'overlapping between patches'
+python3 extract_features.py [-h] [-v 'path to videos directory']
+                                   [-f 'path to meta-data csv file']
+                                   [-np 'number of patches (224*224) to be extracted from frames']
+                                   [-o 'overlapping between patches']
 ```
 
 ResNet50 is used for features extractions.
