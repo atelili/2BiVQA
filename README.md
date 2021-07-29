@@ -3,7 +3,7 @@
 2BiVQA is a no-reference deep learning based video quality assessment metric.
 
 <p align="center">
-  <img src="https://github.com/Tlili-ahmed/2BiVQA/blob/master/figures/fig.png">
+  <img src="https://github.com/Tlili-ahmed/2BiVQA/blob/master/figures/second_fig%20-%20Copie.png">
 </p>
 
 
