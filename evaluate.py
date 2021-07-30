@@ -52,8 +52,8 @@ if __name__ == '__main__':
 
   args = parser.parse_args()
 
-  if not os.path.exists('./features'):
-    os.makedirs('./features')
+  if not os.path.exists('./figures'):
+    os.makedirs('./figures')
 
   predicted_file = args.mos_pred
 
@@ -71,7 +71,7 @@ if __name__ == '__main__':
   u = max(y_ss) +0.5
   x = np.linspace(m-0.2,u+0.2,num=l)
   ms = y_ss
-  kf = ms -logistic_func(ms, *popt)
+  kf = ms - y_pred_logistic
 
   
   sig = np.std(kf)
