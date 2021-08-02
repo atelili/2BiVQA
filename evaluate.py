@@ -15,6 +15,7 @@ import argparse
 import time
 from tqdm import tqdm
 import matplotlib.font_manager as fm
+import matplotlib
 
 
 
@@ -63,18 +64,26 @@ if __name__ == '__main__':
 
   beta_init = [np.max(y_ss), np.min(y_ss), np.mean(y_p), 0.5]
   popt, _ = curve_fit(logistic_func, y_p, y_ss, p0=beta_init, maxfev=int(1e8))
+  
   y_pred_logistic = logistic_func(y_p, *popt)
   xy = np.vstack([y_ss,y_p])
   z = gaussian_kde(xy)(xy)
-  m = min(y_ss)
-  l = len(y_ss)
-  u = max(y_ss) +0.5
+  min_mos = min(y_ss)
+  max_mos = max(y_ss)
+  min_pred = min(y_p)
+  max_pred = max(y_p)  
+  pas = (max_mos - min_mos)/5
+  pas1 = (max_pred - min_pred)/5
+  m = min(y_p) - pas1
+  l = len(y_p)
+  u = max(y_p) +pas1
   x = np.linspace(m-0.2,u+0.2,num=l)
   ms = y_ss
   kf = ms - y_pred_logistic
 
   
   sig = np.std(kf)
+
   
 
   
@@ -98,6 +107,7 @@ if __name__ == '__main__':
 
 
   fig = plt.figure()
+  
   ax = fig.add_subplot(1, 1, 1)
   font = {'family': 'serif',
         'color':  'black',
@@ -117,23 +127,16 @@ if __name__ == '__main__':
                                    style='normal', size=8)
 
 
-  min_mos = min(y_ss)
-  max_mos = max(y_ss)
-  min_pred = min(y_p)
-  max_pred = max(y_p)
 
-  major_ticks_x = np.arange(1, 4.5, 0.5)
-  minor_ticks_x = np.arange(1, 4.5, 0.1 )
-  major_ticks_y = np.arange(1, 4.5, 0.5)
-  minor_ticks_y = np.arange(1, 4.5, 0.1)
 
-  ax.set_xticks(major_ticks_x)
-  ax.set_xticks(minor_ticks_x, minor=True)
-  ax.set_yticks(major_ticks_y)
-  ax.set_yticks(minor_ticks_y, minor=True)
-  ax.set_ylim([min_mos-0.1,max_mos+0.1])
-  ax.set_xlim([min_pred-0.1,max_pred+0.1])
+  
+  ax.set_ylim([min_mos-pas,max_mos+pas])
+  ax.set_xlim([min_pred-pas1,max_pred+pas1])
+
+
+
   plt.scatter(y_p,y_ss, s=10, marker='o', c=z)
+
   plt.plot(x, logistic_func(x, *popt), c='red',label=r'fitted $f(x)$',linewidth=1)
   plt.plot(x, logistic_func(x, *popt)+ 2*sig,'--' , c='red',label=r'$f(x) \pm  2  \sigma$',linewidth=1)
   plt.plot(x, logistic_func(x, *popt)- 2*sig,'--' , c='red',linewidth=1)
@@ -141,9 +144,12 @@ if __name__ == '__main__':
   plt.ylabel("MOS",fontdict=font)
   plt.legend(prop=fondt)
   plt.title('MOS vs predicted score', fontdict=font2)
+  
   plt.grid(which='both')
   plt.grid(which='minor', alpha=0.2)
   plt.grid(which='major', alpha=0.5)
-
+  
   plt.savefig('./figures/mos_sroc =' + str(spearmanr(y_ss,y_p).correlation)+'.png')
+  plt.show()
+  
   
