@@ -160,12 +160,7 @@ def data_prepare():
 if __name__ == '__main__':
 	parser = argparse.ArgumentParser("End2End_train")
 
-	parser.add_argument('-np',
-        '--num_patch',
-        default=15,
-        type=int,
-        help='Number of cropped patches per frames.'
-    )
+
 	parser.add_argument('-nf',
         '--num_frames',
         default=30,
@@ -197,7 +192,7 @@ if __name__ == '__main__':
   callbacks_k = [md,rd,TqdmCallback(verbose=2),ear]
   li = data_prepare()
   li.sort()
-  num_patch = args.num_patch
+  num_patch = 25
   nb = args.num_frames
   sp_pretrained = args.pretrained_model
   sep = int(len(li)/5)
@@ -217,4 +212,6 @@ if __name__ == '__main__':
 		int(len(test_l)/batch_size) ,verbose=0,callbacks=callbacks_k)
 
   	
+
+
 
