@@ -1,3 +1,18 @@
+"""
+Usage:
+    python features_extration -v (video directory) 
+    -f (csv file name + mos) -o (overlapping between patches , default = 0.2) 
+    -np (num patches, default=15) -nf (num frames, default=30)
+
+
+Author : 
+    Ahmed Telili
+"""
+
+
+
+
+
 import numpy as np
 import cv2
 import os 
@@ -11,7 +26,6 @@ from tensorflow.keras.applications.densenet import DenseNet169
 from tensorflow.keras.models import Model
 from sklearn.utils import shuffle
 from tensorflow import keras
-from keras.optimizers import Adam, SGD
 import pandas as pd
 import csv
 from tensorflow.keras.preprocessing import image
@@ -90,7 +104,9 @@ def TemporalCrop(input_video_path, nb):
 	final = []
 	
 	cap = cv2.VideoCapture(input_video_path)
+	print(input_video_path)
 	N = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
+
 	fps = int(cap.get(cv2.CAP_PROP_FPS))
 
 	
@@ -188,11 +204,11 @@ class DataGenerator(keras.utils.Sequence):
 
 
 
-def prepare_datalist(path_to_csv, video_dir):
+def prepare_datalist(path_to_csv, images_dir):
 	data1 = pd.read_csv(path_to_csv)
 	li = data1.values.tolist()
 	for i in range(len(li)):
-		li[i][0]= './'+images_dir + '/' + li[i][0].split('.')[0]+'.mp4'
+		li[i][0]= images_dir + '/' + str(li[i][0]).split('.')[0]+'.mp4'
 	
 	return(li)
 
@@ -243,7 +259,7 @@ def extract_feaures(model,list_IDs, samples, batch_size=1, num_patch = 25,overla
 
 if __name__ == '__main__':
 
-	parser = argparse.ArgumentParser("Konvid_features")
+	parser = argparse.ArgumentParser("features_extraction")
 
 	parser.add_argument('-v',
         '--video_dir',
@@ -271,7 +287,7 @@ if __name__ == '__main__':
 
 	parser.add_argument('-np',
         '--num_patch',
-        default=15,
+        default=25,
         type=int,
         help='Number of cropped patches per frames.'
     )
@@ -287,7 +303,7 @@ if __name__ == '__main__':
 	args = parser.parse_args()
 
 
-	image_dir = args.image_dir
+	image_dir = args.video_dir
 	image_dir = os.path.expanduser(image_dir)
 
 	if not os.path.exists('./features_X'):
@@ -317,4 +333,3 @@ if __name__ == '__main__':
 	
 
 
-	
