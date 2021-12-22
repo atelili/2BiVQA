@@ -2,7 +2,6 @@
 Author : 
     Ahmed Telili
 """
-
 import numpy as np
 import matplotlib.pyplot as plt
 import cv2
@@ -201,8 +200,9 @@ if __name__ == '__main__':
   num_patch = args.num_patch
   nb = args.num_frames
   sp_pretrained = args.pretrained_model
-  train_l = li[0:960]
-  test_l = li[960:1200]
+  sep = int(len(li)/5)
+  train_l = li[0:sep*4]
+  test_l = li[sep*4:]
   train_gen = data_generator(train_l,batch_size=16)
   val_gen = data_generator(test_l,batch_size=16)
   In = Input((nb,num_patch,2048))
@@ -217,3 +217,4 @@ if __name__ == '__main__':
 		int(len(test_l)/batch_size) ,verbose=0,callbacks=callbacks_k)
 
   	
+
