@@ -2,9 +2,38 @@
 
 2BiVQA is a no-reference deep learning based video quality assessment metric.
 
+
 <p align="center">
   <img src="https://github.com/Tlili-ahmed/2BiVQA/blob/master/figures/2BiVQA_f.drawio.png">
 </p>
+
+
+This repository contains the code for our paper on [2BiVQA: Double Bi-LSTM based Video Quality Assessment of UGC Videos]. 
+If you use any of our code, please cite:
+```
+@article{Telili2021,
+  title = {2BiVQA: Double Bi-LSTM based Video Quality Assessment of UGC Videos},
+  author = {Ahmed Telili and Sid Ahmed Fezza and Wassim Hamidouche },
+  booktitle={IEEE TRANSACTIONS ON IMAGE PROCESSING},
+  year = {2022}
+}
+```
+
+
+* [2BiVQA: Double Bi-LSTM based Video Quality Assessment of UGC Videos]
+  * [Requirements](#requirements)
+  * [Features extraction](#features-extraction)
+  * [Model Training](#model-training)
+  * [Test](#test)
+      * [On KonViD-1K](#on-KonViD-1K)
+      * [LIVE_VQC](#live-vqc)
+  * [Demo](#demo)
+  * [Evaluate](#evaluate)
+  * [Performance Benchmark](#performance-benchmark)
+  * [Reference](#reference)
+    
+<!-- /code_chunk_output -->
+
 
 
 ## 1-Requirements
@@ -36,12 +65,7 @@ This step can be skipped, and directly test the model in the next section with p
 
 To train your own model:
 
-You can train the first bi-lstm to do spatial pooling between patches, or uses our spatial bi-lstm which was trained on KONIQ 10-k dataset. 
 
-```python
-python train_spatial_bilstm.py --x_train 'path to train npy file'
-```
-Then you need to train the second Bi-lstm to do temporal pooling between frames:
 
 ```python
 python train.py --x_train 'path to train npy file' --n 'number of frames per video' --spatial_weights 'path to spatial bi-lstm model'
@@ -83,11 +107,6 @@ python test_model.py --dataset live
 </p>
 
 
-#### c-On custom dataset: 
-
-```python
-python test_model.py  --input_final_model 'final model' --sp_model_weights 'path sp model'  --x_test 'path to npy file' --n 'number of frames per video'
-```
 
 ## 5-Demo:
 
@@ -144,18 +163,6 @@ python evaluate.py  --mos_pred konvid.csv
 | RAPIQUE       | 0.7548   | 0.7863  | - | 10.518  |
 | 2BiVQA   | 0.7614  | 0.8325     | 0.6212 | 9,9799 |
 
-
-
-###### UGC-VQA:
-
-|    Methods   |SROCC            | PLCC            | KROCC        | RMSE |
-|:------------:|:---------------------:|:--------------------:|:-------------------:|:------------:|
-| BRISQUE      | 0.8346          | 0.8886          | 0.4173   | 0.5587   |  
-| NIQE    | 0.5929         | 0.5977           |0.4173 | 0.9764 |
-| VSFA      | 0.8925   | 0.9587      | 0.7280 | 0.3463 |
-| RAPIQUE       | 0.8647   | 0.9247  | 0.6898 | 0.4742  |
-| NR-QM UGC    | 0.9352 | 0.9826 | 0.7937 | 0.2260 |
-| 2BiVQA  | 0.9886  | 0.9987     | 0.9276 | 0.0630 |
 
 
 
