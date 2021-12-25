@@ -1,6 +1,5 @@
 # 2BiVQA
 
-2BiVQA is a no-reference deep learning based video quality assessment metric.
 
 
 <p align="center">
@@ -8,7 +7,7 @@
 </p>
 
 
-This repository contains the code for our paper on [2BiVQA: Double Bi-LSTM based Video Quality Assessment of UGC Videos]. 
+This repository contains the code for our paper on [2BiVQA: Double Bi-LSTM based Video Quality Assessment of UGC Videos](#2bivqa:_double_bi-lstm_based_video_quality_assessment_of_ugc_videos). 
 If you use any of our code, please cite:
 ```
 @article{Telili2021,
