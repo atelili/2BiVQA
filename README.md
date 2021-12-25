@@ -25,8 +25,8 @@ If you use any of our code, please cite:
   * [Features extraction](#features-extraction)
   * [Model Training](#model-training)
   * [Test](#test)
-      * [On KonViD-1K](#on-KonViD-1K)
-      * [LIVE_VQC](#live-vqc)
+      * [On KonViD-1K](#a-on-Konvid-1k)
+      * [LIVE_VQC](#b-on-live_vqc)
   * [Demo](#demo)
   * [Evaluate](#evaluate)
   * [Performance Benchmark](#performance-benchmark)
@@ -36,12 +36,12 @@ If you use any of our code, please cite:
 
 
 
-## 1-Requirements
+## Requirements
 ```python
 pip install -r requirements.txt
 ```
 
-## 2-Features extraction
+## Features extraction
 
 Please note that the meta-data should be a csv file with two columns: video name and MOS.
 
@@ -59,7 +59,7 @@ ResNet50 is used for features extractions.
 
 
 
-## 3-Model Training (optional):
+## Model Training (optional):
 
 This step can be skipped, and directly test the model in the next section with pre-trained models. 
 
@@ -71,7 +71,7 @@ To train your own model:
 python train.py --x_train 'path to train npy file' --n 'number of frames per video' --spatial_weights 'path to spatial bi-lstm model'
 ```
 
-## 4-Test: 
+## Test: 
 
 
 To test model:
@@ -108,7 +108,7 @@ python test_model.py --dataset live
 
 
 
-## 5-Demo:
+## Demo:
 
 To predict quality for your own dataset using pre-trained model:
 
@@ -116,7 +116,7 @@ To predict quality for your own dataset using pre-trained model:
 python demo.py  --video_dir 'path to your dataset folder'
 ```
 
-## 6-Evaluate:
+## Evaluate:
 
 To evaluate model:
 
@@ -128,7 +128,7 @@ python evaluate.py  --mos_pred konvid.csv
 
 
 
-## 7-Performance Benchmark:
+## Performance Benchmark:
 
 
 ###### KonViD-1K:
