@@ -14,7 +14,7 @@ from tensorflow.keras.models import Model
 from statistics import mean
 from sklearn.utils import shuffle
 from tensorflow import keras
-from keras.optimizers import Adam, SGD
+from tensorflow.keras.optimizers import Adam
 import pandas as pd
 import datetime
 from keras.callbacks import ModelCheckpoint, EarlyStopping, ReduceLROnPlateau ,Callback,TensorBoard
@@ -33,7 +33,8 @@ from tensorflow.keras.layers import MaxPooling2D ,Dense,Concatenate ,Dropout ,In
 import argparse
 import random
 from tqdm import tqdm
-
+import time
+from scipy.optimize import curve_fit
 
 
 
@@ -107,13 +108,13 @@ def build_model(batch_shape, model_final):
   model.summary()
   return model
 
-def data_prepare(paths):
-  x = os.listdir(paths)
+def data_prepare():
+  x = os.listdir('./features_X/')
   li = []
   for i in range(len(x)):
     tem = []
-    x_f = paths + '/features_X/' + x[i]
-    y_f = paths + '/features_y/' + x[i]
+    x_f =  './features_X/' + x[i]
+    y_f =  './features_y/' + x[i]
     tem.append(x_f)
     tem.append(y_f)
     li.append(tem)
@@ -145,18 +146,21 @@ if __name__ == '__main__':
         help='path to videos features.'
     ) 
 
-  model_sp = '/models/res-bi-sp_koniq.h5'
-  nb = args.num_framess
+  args = parser.parse_args()
+
+  model_sp = './models/res-bi-sp_koniq.h5'
+  nb = args.num_frames
   model_end = args.pretrained_model
   paths = args.paths
   model = load_model(model_sp)
   model_final = Model(inputs=model.input,outputs=model.layers[-3].output )
   model = build_model((nb,25,2048), model_final)
   model.load_weights(model_end)
-  test_l = data_prepare(paths)
+  test_l = data_prepare()
 
-  test_gen = data_generator_1(test_l)
-  s_gen = data_generator_2(test_l)
+  test_gen = data_generator_1(test_l,nb)
+  
+  s_gen = data_generator_2(test_l,nb)
   y_p = model.predict(test_gen, steps = int(len(test_l)))
   y_ss = []
 
@@ -167,8 +171,21 @@ if __name__ == '__main__':
   y_ss = y_ss.reshape(len(test_l),1)
   srocc = spearmanr(y_ss,y_p).correlation
   y_p = np.reshape(y_p,(len(test_l))) 
+  y_p =  y_p * 5
   y_ss = np.reshape(y_ss,(len(test_l))) 
+  names = []
+  for i in range(len(test_l)):
+    a = test_l[i][0].split('/')[-1]
+    a = a.split('.npy')[0]
+    names.append(a)
+  
+  y_ss_l = y_ss.tolist()
+  y_p_l = y_p.tolist()
+  df = pd.DataFrame(list(zip(names, y_ss_l,y_p_l)),
+               columns =['Name', 'MOS', 'Predicted MOS'])
 
+  df.to_csv('results.csv', index=False)
+  
   beta_init = [np.max(y_ss), np.min(y_ss), np.mean(y_p), 0.5]
   popt, _ = curve_fit(logistic_func, y_p, y_ss, p0=beta_init, maxfev=int(1e8))
   y_pred_logistic = logistic_func(y_p, *popt)
