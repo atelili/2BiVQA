@@ -239,7 +239,8 @@ python evaluate.py  --mos_pred konvid.csv
   year={2017},
   organization={IEEE}
 }
-
+```
+```
 @article{sinno2018large,
   title={Large-scale study of perceptual video quality},
   author={Sinno, Zeina and Bovik, Alan Conrad},
@@ -250,7 +251,8 @@ python evaluate.py  --mos_pred konvid.csv
   year={2018},
   publisher={IEEE}
 }
-
+```
+```
 @inproceedings{wang2019youtube,
   title={YouTube UGC dataset for video compression research},
   author={Wang, Yilin and Inguva, Sasi and Adsumilli, Balu},
