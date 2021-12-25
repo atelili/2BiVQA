@@ -49,7 +49,6 @@ Please note that the meta-data should be a csv file with two columns: video name
 ```
 python3 extract_features.py [-h] [-v 'path to videos directory']
                                    [-f 'path to meta-data csv file']
-                                   [-np 'number of patches (224*224) to be extracted from frames']
                                    [-o 'overlapping between patches']
 ```
 
@@ -68,7 +67,8 @@ To train your own model:
 
 
 ```python
-python train.py --x_train 'path to train npy file' --n 'number of frames per video' --spatial_weights 'path to spatial bi-lstm model'
+python End2End_train [-h] [-nf number of frames to be extracted] [-b batch_size]
+                     
 ```
 
 ## Test: 
@@ -113,7 +113,7 @@ python test_model.py --dataset live
 To predict quality for your own dataset using pre-trained model:
 
 ```python
-python demo.py  --video_dir 'path to your dataset folder'
+python demo.py  [-h] [-nf number of frames to be extracted] [-m path to pretrained model] [-f path to videos dir]
 ```
 
 ## Evaluate:
@@ -186,7 +186,7 @@ python evaluate.py  --mos_pred konvid.csv
 | NIQE      |0.2379 | 0.2776 | 0.1600 | 0.6174|
 | ILNIQE      |0.2918 | 0.3302  | 0.1980 | 0.6052|
 | VIIDEO      |0.0580 | 0.1534 | 0.0389 | 0.6359 |
-| GM-LOG      | 0.3678 | 0.3920 0.2517 0.5896 |
+| GM-LOG      | 0.3678 | 0.3920  | 0.2517 |  0.5896 |
 | HIGRADE      |0.7376 | 0.7216 | 0.5478 | 0.4471|
 | FRIQUEE     | 0.7652 | 0.7571 | 0.5688 | 0.4169 |
 | CORNIA     |0.5972  | 0.6057  | 0.4211 | 0.5136 |
