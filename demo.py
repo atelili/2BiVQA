@@ -1,219 +1,85 @@
 import numpy as np
+import matplotlib.pyplot as plt
 import cv2
-import os
-import time
-import shutil
-from tensorflow.keras import layers
-from keras.models import load_model
-from keras.layers import Layer
-from tensorflow.keras.layers import MaxPooling2D ,Dense,Concatenate ,Dropout ,Input,concatenate,Conv2D,Reshape,GlobalMaxPooling2D,Flatten,GlobalAveragePooling2D,AveragePooling2D,Lambda,MaxPooling2D,TimeDistributed, Bidirectional, LSTM
+import os 
+from keras import backend as K
+from tqdm.keras import TqdmCallback
+from scipy.stats import spearmanr
 from tensorflow.keras import Input
 from tensorflow.keras import optimizers
 from tensorflow.keras import models
-from tensorflow.keras.applications.resnet50 import ResNet50
+from tensorflow.keras import layers
+from tensorflow.keras import regularizers
 from tensorflow.keras.models import Model
+from statistics import mean
 from sklearn.utils import shuffle
 from tensorflow import keras
-from keras.optimizers import Adam
+from keras.optimizers import Adam, SGD
 import pandas as pd
+import datetime
+from keras.callbacks import ModelCheckpoint, EarlyStopping, ReduceLROnPlateau ,Callback,TensorBoard
+from keras.models import load_model
 from tensorflow.keras.preprocessing import image
-from tensorflow.keras import applications
+from tensorflow.keras import applications 
+import PIL
+from keras.activations import softmax,sigmoid
 import h5py
 from PIL import Image
 from keras.layers import Layer
+from scipy.stats import spearmanr,pearsonr
+import sklearn
 import tensorflow as tf
+from tensorflow.keras.layers import MaxPooling2D ,Dense,Concatenate ,Dropout ,Input,concatenate,Conv2D,Reshape,GlobalMaxPooling2D,Flatten,GlobalAveragePooling2D,AveragePooling2D,Lambda,MaxPooling2D,TimeDistributed, Bidirectional, LSTM
 import argparse
+import random
 from tqdm import tqdm
-from utils.utils import *
+
+
 
 
 
 tf.keras.backend.clear_session()
+start_time = time.time()
+
+def logistic_func(X, bayta1, bayta2, bayta3, bayta4):
+  # 4-parameter logistic function
+  logisticPart = 1 + np.exp(np.negative(np.divide(X - bayta3, np.abs(bayta4))))
+  yhat = bayta2 + np.divide(bayta1 - bayta2, logisticPart)
+  return yhat
 
 
-def start_points(size, split_size, overlap=0):
-    points = [0]
-    stride = int(split_size * (1-overlap))
-    counter = 1
-    while True:
-        pt = stride * counter
-        if pt + split_size >= size:
-            points.append(size - split_size)
-            break
-        else:
-            points.append(pt)
-            counter += 1
-    return points
+def data_generator_1(data, nb, batch_size=1):              
 
-def random_crop(img, shape):
-    return tf.image.random_crop(img, shape)
+    num_samples = len(data)
 
-def crop_image_2(img, overlapping,num_patch):
-
-    img_h, img_w, _ = img.shape
-    split_width = 224
-    split_height = 224
-    X_points = start_points(img_w, split_width, overlapping)
-    Y_points = start_points(img_h, split_height,overlapping )
-
-    count = 0
-    imgs = []
+    while True:   
+        for offset in range(0, num_samples, batch_size ):
+          
+            # Get the samples you'll use in this batch
+            batch_samples = data[offset:offset+batch_size]
+            X_train = np.zeros((batch_size, nb,25,2048))
+            y_train = np.zeros((batch_size,1))
+            for i in range(batch_size):
+              X_train[i,:,:,:] = np.load(batch_samples[i][0])
+              y_train[i,:] = np.load(batch_samples[i][1])
+            yield X_train
 
 
-    for i in Y_points:
-        for j in X_points:
-            split = img[i:i+split_height, j:j+split_width]
-            imgs.append(split)
-            count += 1
+def data_generator_2(data, nb ,batch_size=1):              
 
+    num_samples = len(data)
 
-
-    if len(X_points)*len(Y_points) < num_patch:
-        dif = num_patch - len(X_points)*len(Y_points)
-        for i in range(dif) :
-            imgs.append(random_crop(img,(224,224,3)).numpy())
-
-    elif len(X_points)*len(Y_points) > num_patch:
-        imgs = imgs[0:num_patch]
-
-    
-
-
-
-
-    return(imgs)
-
-
-def convert(seconds):
-    seconds = seconds % (24 * 3600)
-    hour = seconds // 3600
-    seconds %= 3600
-    minutes = seconds // 60
-    seconds %= 60
-      
-    return "%d:%02d:%02d" % (hour, minutes, seconds)
-      
-
-
-
-class DataGenerator(keras.utils.Sequence):
-    def __init__(self, batch_size=1, patches = 25,
-                  shuffle=False, list_IDs='',overlapping = 0.2, nb = 30):
-        'Initialization'
-        self.batch_size = batch_size
-        self.nb = nb
-        self.patches = patches
-        self.shuffle = shuffle
-        self.list_IDs = list_IDs
-        self.overlapping = overlapping
-        self.on_epoch_end()
-   
-    
-    def __len__(self):
-        'Denotes the number of batches per epoch'
-        return int(np.floor(len(self.list_IDs)/ self.batch_size))
-
-    def __getitem__(self, index, nb = 30 ):
-        
-        'Generate one batch of data'
-        # Generate indexes of the batch
-        indexes = self.indexes[index*self.batch_size:(index+1)*self.batch_size]
-        # Find list of IDs
-        batch = [self.list_IDs[k] for k in indexes]
-        
-        # Generate data
-        name, X = self.__data_generation(batch, nb)
-
-        return name, X
-
-    def on_epoch_end(self):
-        'Updates indexes after each epoch'
-        self.indexes = np.arange(len(self.list_IDs))
-        if self.shuffle == True:
-            np.random.shuffle(self.indexes)
-
-
-    def __data_generation(self, batch, nb=30):
-
-        # Initialization
-        X = np.empty((self.nb, self.patches,224,224, 3))
-        
-        
-        # Generate data
-        for i, ID in enumerate(batch):
-
-            imgs = TemporalCrop(ID, self.nb)
-
-            for k in range(len(imgs)):
-                im = crop_image_2(imgs[k],overlapping= self.overlapping, num_patch= self.patches)
-                for j in range(self.patches):
-                    im = np.array(im)
-                    X[k,j,:,:,:]=im[j,:,:,:]
-                    X[k,j,:,:,:] = tf.keras.applications.resnet50.preprocess_input(X[k,j,:,:,:])
-            name = ID
-        
-                   
-              
-        return name, X
-
-
-
-
-def TemporalCrop(input_video_path, nb):
-    out = []
-    final = []
-    
-    cap = cv2.VideoCapture(input_video_path)
-    N = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
-    fps = int(cap.get(cv2.CAP_PROP_FPS))
-
-    
-    while(cap.isOpened()):
-        
-            ret, frame = cap.read()
-            if ret:
-
-                out.append(frame)
-            else:
-                break
-    step = int(N/nb)
-
-    i = 0
-    j = 0
-    while i < nb :
-
-        img = out[j]
-        final.append(img)
-        j = j +step
-        i = i +1
-        
-        
-        
-    return(final)
-
-
-
-
-
-def extract_features(model,list_IDs, samples, batch_size=1, num_patch = 25,overlapping= 0.2):
-    videos = DataGenerator(batch_size=batch_size, list_IDs=list_IDs, patches = num_patch, overlapping = overlapping)
-    name = []
-    features_X = np.zeros((samples,num_patch,2048))
-    i=0 
-    for ID,X in tqdm(videos):
-        for l in range(samples):
-            features = model.predict(X[l,:,:,:,:])
-            features_X[l,:,:] = features
-            
-
-        ID = ID.split('.')[0]
-        ID = ID.split('/')[-1]
-        np.save('./features/'+ID,features_X)
-
-        
-
-
-
+    while True:   
+        for offset in range(0, num_samples, batch_size):
+          
+            # Get the samples you'll use in this batch
+            batch_samples = data[offset:offset+batch_size]
+            X_train = np.zeros((batch_size, nb,25,2048))
+            y_train = np.zeros((batch_size,1))
+            for i in range(batch_size):
+              X_train[i,:,:,:] = np.load(batch_samples[i][0])
+              y_train[i,:] = np.load(batch_samples[i][1])
+            yield y_train
 
 def build_model(batch_shape, model_final):
 
@@ -231,111 +97,91 @@ def build_model(batch_shape, model_final):
   
   model.add(Flatten())
 
-
-  model.add(Dense(256,activation='relu'))
+  model.add(Dense(256,activation='relu', kernel_initializer=tf.keras.initializers.RandomNormal(stddev=0.001)))
   model.add(layers.Dropout(rate=0.5))
-  
+
   model.add(layers.Dense(1))
   model.add(layers.Activation('linear'))
+
   model.compile(optimizer=optimizers.Adam(),loss='mse',metrics=['mae'])
+  model.summary()
   return model
 
+def data_prepare(paths):
+  x = os.listdir(paths)
+  li = []
+  for i in range(len(x)):
+    tem = []
+    x_f = paths + '/features_X/' + x[i]
+    y_f = paths + '/features_y/' + x[i]
+    tem.append(x_f)
+    tem.append(y_f)
+    li.append(tem)
+  li.sort()
 
-def patch_dimension(x_train):
-  a , b = x_train.shape
-  return(int(b/2048))
-
-
-
+  return (li)
 
 if __name__ == '__main__':
+  parser = argparse.ArgumentParser("Demo")
 
-    parser = argparse.ArgumentParser("features_extracion")
 
-    parser.add_argument(
-        '--video_dir',
+  parser.add_argument('-nf',
+        '--num_frames',
+        default=30,
+        type=int,
+        help='Number of cropped frames per video.'
+    )
+
+  parser.add_argument('-m',
+        '--pretrained_model',
         default='',
         type=str,
-        help='Directory path of frames')
+        help='path to pretrained End2End module.'
+    ) 
+  parser.add_argument('-f',
+        '--paths',
+        default='',
+        type=str,
+        help='path to videos features.'
+    ) 
 
+  model_sp = '/models/res-bi-sp_koniq.h5'
+  nb = args.num_framess
+  model_end = args.pretrained_model
+  paths = args.paths
+  model = load_model(model_sp)
+  model_final = Model(inputs=model.input,outputs=model.layers[-3].output )
+  model = build_model((nb,25,2048), model_final)
+  model.load_weights(model_end)
+  test_l = data_prepare(paths)
 
+  test_gen = data_generator_1(test_l)
+  s_gen = data_generator_2(test_l)
+  y_p = model.predict(test_gen, steps = int(len(test_l)))
+  y_ss = []
 
+  for i in range(len(test_l)):
+     y = next(s_gen)
+     y_ss.append(y)
+  y_ss = np.array(y_ss)
+  y_ss = y_ss.reshape(len(test_l),1)
+  srocc = spearmanr(y_ss,y_p).correlation
+  y_p = np.reshape(y_p,(len(test_l))) 
+  y_ss = np.reshape(y_ss,(len(test_l))) 
 
-
-
-
-    args = parser.parse_args()
-    if not os.path.exists('./features'):
-        os.makedirs('./features')
-
-    video_dir = args.video_dir
-
-
-
-
-    test_list = os.listdir(video_dir)
-
-    for i in range(len(test_list)):
-        test_list[i] = video_dir + '/' + test_list[i]
-
-
-
-    num_patch = 25
-    overlap = 0.2
-    n = 30
-
-    batch_shapes = (num_patch,224,224,3)
-
-    model_final = model_build(batch_shapes)
-    print('======================================================')
-    start_time = time.time()
-    print('Extract features ...')
-
-
-
-    extract_features(model_final,test_list,samples =n, batch_size=1,  num_patch = num_patch,overlapping= overlap)
-    print('======================================================')
-    print('Done! ')
-    t1 = time.time() - start_time
-    print('Time needed to extract features: ',convert(t1))
-
-    print('======================================================')
-    t2 = time.time()
-    In = Input((n,num_patch,2048))
-
-    model = load_model('./models/res-bi-sp_koniq.h5' )
-
-    model_final = Model(inputs=model.input,outputs=model.layers[-3].output )
-    model = build_model((n,num_patch,2048), model_final)
-    model.load_weights('./models/konvid_2_bilstm_join.h5')
-
-    videos_features = os.listdir('./features')
-
-    scores = []
-    names = []
-    print('Predicting MOS ..   ')
-    print('======================================================')
-    for i in tqdm(videos_features):
-        x_test = np.load('./features/' + i)
-        x_test = x_test.reshape((1,n,num_patch,2048))
-        y_pred = model.predict(x_test)
-        y_pred = y_pred.tolist()
-        na = i.split('.')[0] + '.mp4'
-        names.append(na)
-        scores.append(y_pred[0][0]*5)
-
-
-    df = pd.DataFrame(list(zip(names, scores)),
-               columns =['Videos', 'scores'])
-
-    df.to_csv('predicted_mos.csv', index=False)
-    print('======================================================')
-
-    print('Done !')
-    t3 = time.time() - t2
-    print('Time needed to predict mos: ',convert(t3))
-
-    print('======================================================')
-
-
-
+  beta_init = [np.max(y_ss), np.min(y_ss), np.mean(y_p), 0.5]
+  popt, _ = curve_fit(logistic_func, y_p, y_ss, p0=beta_init, maxfev=int(1e8))
+  y_pred_logistic = logistic_func(y_p, *popt)
+      
+  plcc = stats.pearsonr(y_ss,y_pred_logistic)[0]
+  rmse = np.sqrt(mean_squared_error(y_ss,y_pred_logistic))
+  try:
+       KRCC = scipy.stats.kendalltau(y_ss, y_p)[0]
+  except:
+       KRCC = scipy.stats.kendalltau(y_ss, y_p, method='asymptotic')[0]
+  rmse = np.sqrt(mean_squared_error(y_ss,y_pred_logistic))
+  print('srocc = ', srocc )
+  print('plcc = ' , plcc)
+  print( 'rmse = ', rmse)
+  print('krocc = ', KRCC)
+ 
