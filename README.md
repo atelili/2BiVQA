@@ -66,7 +66,7 @@ To train your own model:
 
 
 ```python
-python End2End_train [-h] [-nf number of frames to be extracted] [-b batch_size]
+python End2End_train.py [-h] [-nf number of frames to be extracted] [-b batch_size]
                      
 ```
 
