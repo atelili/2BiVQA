@@ -2,12 +2,16 @@
 Usage:
     python features_extration -v (video directory) 
     -f (csv file name + mos) -o (overlapping between patches , default = 0.2) 
-    -np (num patches, default=15) -nf (num frames, default=30)
+    -np (num patches, default=25) -nf (num frames, default=30)
 
 
 Author : 
     Ahmed Telili
 """
+
+
+
+
 
 import numpy as np
 import cv2
@@ -94,44 +98,6 @@ def crop_image(img, overlapping,num_patch):
 
 
 	return(imgs)
-
-
-
-
-def data_generator_1(data,batch_size=1):              
-
-    num_samples = len(data)
-
-    while True:   
-        for offset in range(0, num_samples, batch_size):
-          
-            # Get the samples you'll use in this batch
-            batch_samples = data[offset:offset+batch_size]
-            X_train = np.zeros((batch_size, 30,25,2048))
-            y_train = np.zeros((batch_size,1))
-            for i in range(batch_size):
-              X_train[i,:,:,:] = np.load(batch_samples[i][0])
-              y_train[i,:] = np.load(batch_samples[i][1])
-            yield X_train
-
-
-def data_generator_2(data,batch_size=1):              
-
-    num_samples = len(data)
-
-    while True:   
-        for offset in range(0, num_samples, batch_size):
-          
-            # Get the samples you'll use in this batch
-            batch_samples = data[offset:offset+batch_size]
-            X_train = np.zeros((batch_size, 30,25,2048))
-            y_train = np.zeros((batch_size,1))
-            for i in range(batch_size):
-              X_train[i,:,:,:] = np.load(batch_samples[i][0])
-              y_train[i,:] = np.load(batch_samples[i][1])
-            yield y_train
-
-
 
 def TemporalCrop(input_video_path, nb):
 	out = []
@@ -270,7 +236,7 @@ def model_build(batch_shape):
 	return model_final
 
 
-def extract_feaures(model,list_IDs, samples,paths, batch_size=1, num_patch = 25,overlapping= 0.2):
+def extract_feaures(model,list_IDs, samples, batch_size=1, num_patch = 25,overlapping= 0.2):
 	images = DataGenerator(batch_size=batch_size, list_IDs=list_IDs, patches = num_patch, overlapping = overlapping)
 	name = []
 	features_X = np.zeros((samples,num_patch,2048))
@@ -286,14 +252,14 @@ def extract_feaures(model,list_IDs, samples,paths, batch_size=1, num_patch = 25,
 		
 		features_Y = Y
 		ID = ID.split('.')[0]
-		np.save(paths+'/features_X/'+ID,features_X)
-		np.save(paths+'/features_y/'+ID,features_Y)
+		np.save('./features_X/'+ID,features_X)
+		np.save('./features_y/'+ID,features_Y)
 
 
 
 if __name__ == '__main__':
 
-	parser = argparse.ArgumentParser("features_extraction")
+	parser = argparse.ArgumentParser("Konvid_features")
 
 	parser.add_argument('-v',
         '--video_dir',
@@ -321,7 +287,7 @@ if __name__ == '__main__':
 
 	parser.add_argument('-np',
         '--num_patch',
-        default=15,
+        default=25,
         type=int,
         help='Number of cropped patches per frames.'
     )
@@ -340,24 +306,15 @@ if __name__ == '__main__':
 	image_dir = args.video_dir
 	image_dir = os.path.expanduser(image_dir)
 
-	if not os.path.exists('./test/features_X'):
-		os.makedirs('./test/features_X')
+	if not os.path.exists('./features_X'):
+		os.makedirs('./features_X')
 
 
-	if not os.path.exists('./test/features_y'):
-		os.makedirs('./test/features_y')
-
-	if not os.path.exists('./train/features_X'):
-		os.makedirs('./train/features_X')
-
-
-	if not os.path.exists('./train/features_y'):
-		os.makedirs('./train/features_y')
+	if not os.path.exists('./features_y'):
+		os.makedirs('./features_y')
 
 	li = prepare_datalist(path_to_csv = args.csv_file , images_dir= args.video_dir)
-	sep = int(len(li)/5)
-	train_l = li[0:sep*4]
-	test_l = li[sep*4:]
+
 
 	
 
@@ -372,8 +329,7 @@ if __name__ == '__main__':
 	model_final = model_build(batch_shapes)
 
 
-	extract_feaures(model_final,train_l,samples =nb, batch_size=1,  num_patch = num_patch,overlapping= overlap, paths = './train/')
+	extract_feaures(model_final,li,samples =nb, batch_size=1,  num_patch = num_patch,overlapping= overlap)
 	
-	extract_feaures(model_final,test_l,samples =nb, batch_size=1,  num_patch = num_patch,overlapping= overlap,paths= './test/')
 
 
