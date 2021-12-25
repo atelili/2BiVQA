@@ -18,7 +18,7 @@ from tensorflow.keras.models import Model
 from statistics import mean
 from sklearn.utils import shuffle
 from tensorflow import keras
-from keras.optimizers import Adam, SGD
+from tensorflow.keras.optimizers import Adam
 import pandas as pd
 import datetime
 from keras.callbacks import ModelCheckpoint, EarlyStopping, ReduceLROnPlateau ,Callback,TensorBoard
@@ -175,39 +175,42 @@ if __name__ == '__main__':
     )
 
 
+	parser.add_argument('-b',
+        '--batch_size',
+        default=16,
+        type=int,
+        help='batch_size.'
+    )
 
 
-  if not os.path.exists('./models'):
-    os.makedirs('./models')
+	if not os.path.exists('./models'):
+		os.makedirs('./models')
 
-  #train_list, val_list = prepare_datalist(path_to_csv = args.csv_file , images_dir= args.image_dir, random_split=False)
+	args = parser.parse_args()
 
-  #num_patch = args.num_patch
-  #batch_size = args.batch_size
-  #batch_shapes = (num_patch,224,224,3)
-  
-  md = ModelCheckpoint(filepath='./models/trained_model.h5',monitor='val_loss', mode='min',save_weights_only=True,save_best_only=True,verbose=1)
-  rd = ReduceLROnPlateau(monitor='val_loss', factor=0.5, patience=20,min_lr=1e-7, verbose=2, mode='min')
-  ear = EarlyStopping(monitor='val_loss',mode ='min', patience=80, verbose=2,restore_best_weights=False)
-  callbacks_k = [md,rd,TqdmCallback(verbose=2),ear]
-  li = data_prepare()
-  li.sort()
-  num_patch = 25
-  nb = args.num_frames
-  sp_pretrained = args.pretrained_model
-  sep = int(len(li)/5)
-  train_l = li[0:sep*4]
-  test_l = li[sep*4:]
-  train_gen = data_generator(train_l,batch_size=16)
-  val_gen = data_generator(test_l,batch_size=16)
-  In = Input((nb,num_patch,2048))
-  model = load_model(sp_pretrained)
-  for layer in model.layers:
-  	layer.trainable = True
-  model_final = Model(inputs=model.input,outputs=model.layers[-3].output )
-  model = build_model((nb,num_patch,2048), model_final)
+	md = ModelCheckpoint(filepath='./models/trained_model.h5',monitor='val_loss', mode='min',save_weights_only=True,save_best_only=True,verbose=1)
+	rd = ReduceLROnPlateau(monitor='val_loss', factor=0.5, patience=20,min_lr=1e-7, verbose=2, mode='min')
+	ear = EarlyStopping(monitor='val_loss',mode ='min', patience=80, verbose=2,restore_best_weights=False)
+	callbacks_k = [md,rd,TqdmCallback(verbose=2),ear]
+	li = data_prepare()
+	li.sort()
+	num_patch = 25
+	nb = args.num_frames
+	batch_size = args.batch_size
+	sp_pretrained = args.pretrained_model
+	sep = int(len(li)/5)
+	train_l = li[0:sep*4]
+	test_l = li[sep*4:]
+	train_gen = data_generator(train_l,batch_size= batch_size)
+	val_gen = data_generator(test_l,batch_size= batch_size)
+	In = Input((nb,num_patch,2048))
+	model = load_model(sp_pretrained)
+	for layer in model.layers:
+		layer.trainable = True
+	model_final = Model(inputs=model.input,outputs=model.layers[-3].output )
+	model = build_model((nb,num_patch,2048), model_final)
 
-  history = model.fit_generator(train_gen,steps_per_epoch = int(len(train_l)/batch_size),
+	history = model.fit_generator(train_gen,steps_per_epoch = int(len(train_l)/ batch_size),
 		epochs=200,validation_data=val_gen,validation_steps =
 		int(len(test_l)/batch_size) ,verbose=0,callbacks=callbacks_k)
 
