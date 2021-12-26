@@ -19,7 +19,7 @@ If you use any of our code, please cite:
 ```
 
 
-* [2BiVQA: Double Bi-LSTM based Video Quality Assessment of UGC Videos]
+
   * [Requirements](#requirements)
   * [Features extraction](#features-extraction)
   * [Model Training](#model-training)
