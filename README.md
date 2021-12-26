@@ -130,7 +130,7 @@ python evaluate.py  --mos_pred konvid.csv
 ## Performance Benchmark:
 
 
-###### KonViD-1K:
+###### KonViD-1K [1]:
 
   
 |    Methods   |SROCC            | PLCC            | KROCC        | RMSE |
@@ -153,7 +153,7 @@ python evaluate.py  --mos_pred konvid.csv
 | RAPIQUE       | 0.8072  | 0.8175  | 0.6189 | 0.3623  |
 | 2BiVQA   | 0.8463  | 0.8404     | 0.6529 | 0.3620 |
 
-###### LIVE VQC:
+###### LIVE VQC [2]:
 
 |    Methods   |SROCC            | PLCC            | KROCC        | RMSE |
 |:------------:|:---------------------:|:--------------------:|:-------------------:|:------------:|
@@ -177,7 +177,7 @@ python evaluate.py  --mos_pred konvid.csv
 
 
 
-###### YouTube-UGC:
+###### YouTube-UGC [3]:
 
 |    Methods   |SROCC            | PLCC            | KROCC        | RMSE |
 |:------------:|:---------------------:|:--------------------:|:-------------------:|:------------:|
@@ -230,36 +230,11 @@ python evaluate.py  --mos_pred konvid.csv
 
 
 ```
-@inproceedings{hosu2017konstanz,
-  title={The Konstanz natural video database (KoNViD-1k)},
-  author={Hosu, Vlad and Hahn, Franz and Jenadeleh, Mohsen and Lin, Hanhe and Men, Hui and Szir{\'a}nyi, Tam{\'a}s and Li, Shujun and Saupe, Dietmar},
-  booktitle={2017 Ninth international conference on quality of multimedia experience (QoMEX)},
-  pages={1--6},
-  year={2017},
-  organization={IEEE}
-}
-```
-```
-@article{sinno2018large,
-  title={Large-scale study of perceptual video quality},
-  author={Sinno, Zeina and Bovik, Alan Conrad},
-  journal={IEEE Transactions on Image Processing},
-  volume={28},
-  number={2},
-  pages={612--627},
-  year={2018},
-  publisher={IEEE}
-}
-```
-```
-@inproceedings{wang2019youtube,
-  title={YouTube UGC dataset for video compression research},
-  author={Wang, Yilin and Inguva, Sasi and Adsumilli, Balu},
-  booktitle={2019 IEEE 21st International Workshop on Multimedia Signal Processing (MMSP)},
-  pages={1--5},
-  year={2019},
-  organization={IEEE}
-}
+[1] V. Hosu, F. Hahn, M. Jenadeleh, H. Lin, H. Men, T. Szirányi, S. Li,and D. Saupe, “The konstanz natural video database (konvid-1k),” in2017 Ninth international conference on quality of multimedia experience(QoMEX).  IEEE, 2017, pp. 1–6.
+
+[2] Z. Sinno and A. C. Bovik, “Large-scale study of perceptual videoquality,”IEEE Transactions on Image Processing, vol. 28, no. 2, pp.612–627, 2018.
+
+[3] Y. Wang, S. Inguva, and B. Adsumilli, “Youtube ugc dataset for videocompression research,” in2019 IEEE 21st International Workshop onMultimedia Signal Processing (MMSP).  IEEE, 2019, pp. 1–5.
 ```
 
 
