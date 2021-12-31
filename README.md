@@ -1,5 +1,7 @@
 # 2BiVQA
 
+[![License](https://img.shields.io/github/license/mashape/apistatus.svg?maxAge=2592000)](License)
+
 2BiVQA: Double Bi-LSTM based Video Quality Assessment of UGC Videos
 
 <p align="center">
@@ -22,14 +24,14 @@ If you use any of our code, please cite:
 
   * [Requirements](#requirements)
   * [Features extraction](#features-extraction)
-  * [Model Training](#model-training)
+  * [Model Training](#model-training-(-optional))
   * [Test](#test)
       * [On KonViD-1K](#a-on-Konvid-1k)
-      * [LIVE_VQC](#b-on-live_vqc)
+      * [On LIVE_VQC](#b-on-live_vqc)
   * [Demo](#demo)
   * [Evaluate](#evaluate)
   * [Performance Benchmark](#performance-benchmark)
-  * [Reference](#reference)
+  * [References](#references)
     
 <!-- /code_chunk_output -->
 
