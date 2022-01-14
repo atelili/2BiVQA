@@ -1,6 +1,6 @@
 # 2BiVQA
 
-[![License](https://img.shields.io/github/license/mashape/apistatus.svg?maxAge=2592000)](License)
+[![License](https://img.shields.io/github/license/mashape/apistatus.svg?maxAge=2592000)](LICENSE)
 
 2BiVQA: Double Bi-LSTM based Video Quality Assessment of UGC Videos
 
