@@ -5,7 +5,7 @@
 2BiVQA: Double Bi-LSTM based Video Quality Assessment of UGC Videos
 
 <p align="center">
-  <img src="https://github.com/Tlili-ahmed/2BiVQA/blob/master/figures/2BiVQA_f.drawio.png">
+  <img src="https://github.com/Tlili-ahmed/2BiVQA/blob/master/figures/2BiVQA_overview2.pdf">
 </p>
 
 
