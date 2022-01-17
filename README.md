@@ -14,7 +14,7 @@ If you use any of our code, please cite:
 ```
 @article{Telili2021,
   title = {2BiVQA: Double Bi-LSTM based Video Quality Assessment of UGC Videos},
-  author = {Ahmed Telili and Sid Ahmed Fezza and Wassim Hamidouche },
+  author = {Ahmed Telili, Sid Ahmed Fezza, Wassim Hamidouche and Hanene F. Z. Brachemi Meftah},
   booktitle={IEEE TRANSACTIONS ON IMAGE PROCESSING},
   year = {2022}
 }
