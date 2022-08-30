@@ -9,8 +9,8 @@
 </p>
 
 
-This repository contains the code for our paper on [2BiVQA: Double Bi-LSTM based Video Quality Assessment of UGC Videos](#2bivqa:_double_bi-lstm_based_video_quality_assessment_of_ugc_videos). 
-If you use any of our code, please cite:
+This repository contains the code of our paper [2BiVQA: Double Bi-LSTM based Video Quality Assessment of UGC Videos](#2bivqa:_double_bi-lstm_based_video_quality_assessment_of_ugc_videos). 
+If you use any part of our code, please cite:
 ```
 Coming soon
 ```
@@ -70,7 +70,7 @@ python End2End_train.py [-h] [-nf number of frames to be extracted] [-b batch_si
 ## Test: 
 
 
-To test model:
+To test the model:
 
 #### a-On KonViD-1K:
 
@@ -106,7 +106,7 @@ python test_model.py --dataset live
 
 ## Demo:
 
-To predict quality for your own dataset using pre-trained model:
+To predict the quality of your own dataset using pre-trained model:
 
 ```python
 python demo.py  [-h] [-nf number of frames to be extracted] [-m path to pretrained model] [-f path to videos dir]
@@ -114,7 +114,7 @@ python demo.py  [-h] [-nf number of frames to be extracted] [-m path to pretrain
 
 ## Evaluate:
 
-To evaluate model:
+To evaluate the model:
 
 Please note that your csv file should have two columns: 'Mos' and 'Predicted'.
 
