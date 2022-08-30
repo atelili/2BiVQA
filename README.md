@@ -12,12 +12,7 @@
 This repository contains the code for our paper on [2BiVQA: Double Bi-LSTM based Video Quality Assessment of UGC Videos](#2bivqa:_double_bi-lstm_based_video_quality_assessment_of_ugc_videos). 
 If you use any of our code, please cite:
 ```
-@article{Telili2021,
-  title = {2BiVQA: Double Bi-LSTM based Video Quality Assessment of UGC Videos},
-  author = {Ahmed Telili, Sid Ahmed Fezza, Wassim Hamidouche and Hanene F. Z. Brachemi Meftah},
-  booktitle={IEEE TRANSACTIONS ON IMAGE PROCESSING},
-  year = {2022}
-}
+Coming soon
 ```
 
 
