@@ -2,6 +2,8 @@
 
 [![License](https://img.shields.io/github/license/mashape/apistatus.svg?maxAge=2592000)](LICENSE)
 
+[![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/2bivqa-double-bi-lstm-based-video-quality/video-quality-assessment-on-youtube-ugc)](https://paperswithcode.com/sota/video-quality-assessment-on-youtube-ugc?p=2bivqa-double-bi-lstm-based-video-quality)
+
 2BiVQA: Double Bi-LSTM based Video Quality Assessment of UGC Videos
 
 <p align="center">
