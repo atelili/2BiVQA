@@ -12,12 +12,11 @@
 This repository contains the code of our paper [2BiVQA: Double Bi-LSTM based Video Quality Assessment of UGC Videos](https://arxiv.org/abs/2208.14774). 
 If you use any part of our code, please cite:
 ```
-@article{telili2022ugc,
-      title={2BiVQA: Double Bi-LSTM based Video Quality Assessment of UGC Videos}, 
-      author={Telili, Ahmed and Fezza, Sid Ahmed and Hamidouche, Wassim and Meftah, Hanene F. Z. Brachemi},
-      url={https://arxiv.org/abs/2208.14774},
-      year={2022},
-      publisher = {arXiv},
+@article{telili20222bivqa,
+  title={2BiVQA: Double Bi-LSTM based Video Quality Assessment of UGC Videos},
+  author={Telili, Ahmed and Fezza, Sid Ahmed and Hamidouche, Wassim and Meftah, Hanene FZ},
+  journal={arXiv preprint arXiv:2208.14774},
+  year={2022}
 }
 
 ```
