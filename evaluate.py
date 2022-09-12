@@ -22,7 +22,6 @@ import matplotlib
 
 
 
-start_time = time.time()
 
 
 
