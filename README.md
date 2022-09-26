@@ -76,9 +76,7 @@ python End2End_train.py [-h] [-nf number of frames to be extracted] [-b batch_si
                                          
 ```
 
-To train your own spatial pooling model:
-
-
+To train your own spatial pooling model on other image datasets:
 
 ```python
 python spatial_train.py [-h] [-p number of patches] [-b batch_size]
