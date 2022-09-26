@@ -2,7 +2,7 @@
 Usage:
     python features_extration -v (video directory) 
     -f (csv file name + mos) -o (overlapping between patches , default = 0.2) 
-    -np (num patches, default=25) -nf (num frames, default=30)
+    -np (num patches, default=25) -nf (num frames, default=30) -fl (flag (videos or images), default = 0)
 
 
 Author : 
@@ -64,8 +64,9 @@ def start_points(size, split_size, overlap=0):
 def random_crop(img, shape):
 	return tf.image.random_crop(img, shape)
 
-def crop_image(img, overlapping,num_patch):
-
+def crop_image(img, overlapping,num_patch, flag):
+	if flag == 1:
+		img = cv2.imread(img)
 	img_h, img_w, _ = img.shape
 	split_width = 224
 	split_height = 224
@@ -104,7 +105,6 @@ def TemporalCrop(input_video_path, nb):
 	final = []
 	
 	cap = cv2.VideoCapture(input_video_path)
-	print(input_video_path)
 	N = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
 
 	fps = int(cap.get(cv2.CAP_PROP_FPS))
@@ -141,10 +141,11 @@ def TemporalCrop(input_video_path, nb):
 
 class DataGenerator(keras.utils.Sequence):
     def __init__(self, batch_size=1, patches = 15,
-                  shuffle=False, list_IDs='',overlapping = 0.2, nb = 30):
+                  shuffle=False, list_IDs='',overlapping = 0.2, nb = 30, flag = 0):
         'Initialization'
         self.batch_size = batch_size
         self.nb = nb
+        self.flag = flag
         self.patches = patches
         self.shuffle = shuffle
         self.list_IDs = list_IDs
@@ -190,11 +191,10 @@ class DataGenerator(keras.utils.Sequence):
             imgs = TemporalCrop(ID[0], self.nb)
 
             for k in range(len(imgs)):
-            	im = crop_image(imgs[k],overlapping= self.overlapping, num_patch= self.patches)
+            	im = crop_image(imgs[k],overlapping= self.overlapping, num_patch= self.patches, flag = self.flag)
             	for j in range(self.patches):
             		im = np.array(im)
-            		X[k,j,:,:,:]=im[j,:,:,:]
-            		X[k,j,:,:,:] = keras.applications.resnet50.preprocess_input(X[k,j,:,:,:])
+            		X[k,j,:,:,:]=keras.applications.resnet50.preprocess_input(im[j,:,:,:])
             name = ID[0].split('/')[-1]	
             y[i] = ID[1]	
 		
@@ -204,11 +204,77 @@ class DataGenerator(keras.utils.Sequence):
 
 
 
+
+
+class DataGenerator_images(keras.utils.Sequence):
+    def __init__(self, batch_size=1, patches = 15,
+                  shuffle=False, list_IDs='',overlapping = 0.2, flag = 0):
+        'Initialization'
+        self.batch_size = batch_size
+        self.patches = patches
+        self.shuffle = shuffle
+        self.list_IDs = list_IDs
+        self.flag = flag
+        self.overlapping = overlapping
+        self.on_epoch_end()
+   
+    
+    def __len__(self):
+        'Denotes the number of batches per epoch'
+        return int(np.floor(len(self.list_IDs)/ self.batch_size))
+
+    def __getitem__(self, index):
+        
+        'Generate one batch of data'
+        # Generate indexes of the batch
+        indexes = self.indexes[index*self.batch_size:(index+1)*self.batch_size]
+        # Find list of IDs
+        batch = [self.list_IDs[k] for k in indexes]
+        
+        # Generate data
+        name, X, y = self.__data_generation(batch)
+
+        return name, X, y
+
+    def on_epoch_end(self):
+        'Updates indexes after each epoch'
+        self.indexes = np.arange(len(self.list_IDs))
+        if self.shuffle == True:
+            np.random.shuffle(self.indexes)
+
+
+    def __data_generation(self, batch):
+
+        # Initialization
+        X = np.empty((self.patches,224,224, 3))
+        
+        y = np.empty((self.batch_size), dtype=np.float32)
+
+        
+        # Generate data
+        for i, ID in enumerate(batch):
+
+            im = crop_image(ID[0],overlapping= self.overlapping, num_patch= self.patches, flag = self.flag)
+            for j in range(self.patches):
+            	im = np.array(im)
+            	X[j,:,:,:] = keras.applications.resnet50.preprocess_input(im[j,:,:,:])
+            name = ID[0].split('/')[-1]	
+            y[i] = ID[1]	
+		
+                   
+              
+        return name, X, y
+
+
+
+
+
+
 def prepare_datalist(path_to_csv, images_dir):
 	data1 = pd.read_csv(path_to_csv)
 	li = data1.values.tolist()
 	for i in range(len(li)):
-		li[i][0]= images_dir + '/' + str(li[i][0]).split('.')[0]+'.mp4'
+		li[i][0]= images_dir + '/' + str(li[i][0])
 	
 	return(li)
 
@@ -236,24 +302,48 @@ def model_build(batch_shape):
 	return model_final
 
 
-def extract_feaures(model,list_IDs, samples, batch_size=1, num_patch = 25,overlapping= 0.2):
-	images = DataGenerator(batch_size=batch_size, list_IDs=list_IDs, patches = num_patch, overlapping = overlapping)
-	name = []
-	features_X = np.zeros((samples,num_patch,2048))
-	features_Y = np.zeros((1))
-	i=0 
-	for ID,X,Y in tqdm(images):
-		for l in range(samples):
-			features = model.predict(X[l,:,:,:,:])
-			features_X[l,:,:] = features
-			
-      
+def extract_feaures(model,list_IDs, samples, batch_size=1, num_patch = 25,overlapping= 0.2, flag = 0):
 
-		
-		features_Y = Y
-		ID = ID.split('.')[0]
-		np.save('./features_X/'+ID,features_X)
-		np.save('./features_y/'+ID,features_Y)
+	if flag ==0:
+
+		images = DataGenerator(batch_size=batch_size, list_IDs=list_IDs, patches = num_patch, overlapping = overlapping, flag=flag)
+		name = []
+		features_X = np.zeros((samples,num_patch,2048))
+		features_Y = np.zeros((1))
+		i=0 
+		for ID,X,Y in tqdm(images):
+			for l in range(samples):
+				features = model.predict(X[l,:,:,:,:])
+				features_X[l,:,:] = features
+				
+	      
+
+			
+			features_Y = Y
+			ID = ID.split('.')[0]
+			np.save('./features_X/'+ID,features_X)
+			np.save('./features_y/'+ID,features_Y)
+	else:
+		images = DataGenerator_images(batch_size=batch_size, list_IDs=list_IDs, patches = num_patch, overlapping = overlapping, flag=flag)
+		name = []
+		features_X = np.zeros((num_patch,2048))
+		features_Y = np.zeros((1))
+		i=0 
+		for ID,X,Y in tqdm(images):
+
+			features = model.predict(X)
+			features_X = features
+				
+	      
+
+			
+			features_Y = Y
+			ID = ID.split('.')[0]
+			np.save('./features_X/'+ID,features_X)
+			np.save('./features_y/'+ID,features_Y)
+
+
+
 
 
 
@@ -297,6 +387,12 @@ if __name__ == '__main__':
         type=int,
         help='Number of cropped frames per video.'
     )
+	parser.add_argument('-fl',
+        '--flag',
+        default=0,
+        type=int,
+        help='0 for videos and 1 for images.'
+    )
 
 
 
@@ -323,13 +419,14 @@ if __name__ == '__main__':
 	num_patch = args.num_patch
 	overlap = args.overlapping
 	nb = args.num_frames
+	flag = args.flag
 
 	batch_shapes = (num_patch,224,224,3)
 
 	model_final = model_build(batch_shapes)
 
 
-	extract_feaures(model_final,li,samples =nb, batch_size=1,  num_patch = num_patch,overlapping= overlap)
+	extract_feaures(model_final,li,samples =nb, batch_size=1,  num_patch = num_patch,overlapping= overlap, flag=flag)
 	
 
 
