@@ -52,7 +52,9 @@ Please note that the meta-data should be a csv file with two columns: video name
 python3 extract_features.py [-h] [-v 'path to videos directory']
                                    [-f 'path to meta-data csv file']
                                    [-o 'overlapping between patches']
+                                   [-fl 'flag: 0 for videos and 1 for images']
 ```
+To extract features from images, please set flag to 1.
 
 ResNet50 is used for features extractions.
 
@@ -64,13 +66,23 @@ ResNet50 is used for features extractions.
 
 This step can be skipped, and directly test the model in the next section with pre-trained models. 
 
+
 To train your own model:
 
 
 
 ```python
 python End2End_train.py [-h] [-nf number of frames to be extracted] [-b batch_size]
-                     
+                                         
+```
+
+To train your own spatial pooling model:
+
+
+
+```python
+python spatial_train.py [-h] [-p number of patches] [-b batch_size]
+                                         
 ```
 
 ## Test: 
