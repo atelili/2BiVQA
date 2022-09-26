@@ -48,7 +48,7 @@ tf.keras.backend.clear_session()
 
 
 
-def data_generator(data, num_patch= num_patch, batch_size=16):              
+def data_generator(data, num_patch , batch_size=16):              
 
     num_samples = len(data)
     random.shuffle(data)
@@ -115,7 +115,7 @@ def data_prepare():
 if __name__ == '__main__':
 	parser = argparse.ArgumentParser("End2End_train")
 
-    parser.add_argument('-p',
+	parser.add_argument('-p',
         '--patch_number',
         default=16,
         type=int,
